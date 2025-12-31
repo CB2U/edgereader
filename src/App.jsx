@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Box, List, ListItem, ListItemText, CircularProgress, Alert } from '@mui/material';
 import { fetchAllFeeds } from './services/rssService';
+import { loadPreferences } from './services/storageService';
+import { rankArticles } from './services/rankingService';
 import './App.css';
 
 /**
@@ -27,24 +29,33 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [prefs, setPrefs] = useState(null);
 
   useEffect(() => {
-    async function loadFeeds() {
+    async function loadApp() {
       try {
+        setLoading(true);
+        // Load preferences
+        const userPrefs = await loadPreferences();
+        setPrefs(userPrefs);
+
+        // Fetch articles
         const fetchedArticles = await fetchAllFeeds();
         if (fetchedArticles.length === 0) {
           setError('Failed to load feeds. Please check your internet connection.');
         } else {
-          setArticles(fetchedArticles);
+          // Rank articles
+          const ranked = rankArticles(fetchedArticles, userPrefs);
+          setArticles(ranked);
         }
       } catch (err) {
-        console.error('Error loading feeds:', err);
+        console.error('Error loading app data:', err);
         setError('Failed to load feeds. Please check your internet connection.');
       } finally {
         setLoading(false);
       }
     }
-    loadFeeds();
+    loadApp();
   }, []);
 
   if (loading) {
