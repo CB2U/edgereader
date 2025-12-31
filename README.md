@@ -26,7 +26,7 @@
 **Download:**
 - [Google Play](https://play.google.com/store/apps/details?id=dev.edgereader.app) _(coming soon)_
 - [F-Droid](https://f-droid.org/packages/dev.edgereader.app) _(coming soon)_
-- [GitHub Releases](https://github.com/yourusername/edgereader/releases) _(APK direct download)_
+- [GitHub Releases](https://github.com/CB2U/edgereader/releases) _(APK direct download)_
 
 **Requirements:**
 - Android 8.0 (API 26) or higher
@@ -37,7 +37,7 @@
 **Clone and build:**
 
 ```bash
-git clone https://github.com/yourusername/edgereader.git
+git clone https://github.com/CB2U/edgereader.git
 cd edgereader
 ./gradlew assembleDebug
 ```
@@ -49,7 +49,6 @@ cd edgereader
 - Networking: Retrofit + OkHttp
 - Preferences: DataStore
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
 ## 🎯 How It Works
 
@@ -87,7 +86,6 @@ You have full control—no black-box algorithms, no hidden manipulation.
 - GPL-3.0 license prevents proprietary forks
 - Network traffic can be inspected (no hidden calls)
 
-Read our [Privacy Policy](https://yourusername.github.io/edgereader/privacy-policy.html) for full details.
 
 ## 📱 Screenshots
 
@@ -123,13 +121,12 @@ See [PRD.md](PRD.md) for detailed requirements and technical specifications.
 Contributions are welcome! EdgeReader is built for the privacy community by the privacy community.
 
 **Ways to contribute:**
-- 🐛 Report bugs or suggest features via [Issues](https://github.com/yourusername/edgereader/issues)
-- 🔧 Submit pull requests (see [CONTRIBUTING.md](CONTRIBUTING.md))
+- 🐛 Report bugs or suggest features via [Issues](https://github.com/CB2U/edgereader/issues)
 - 📰 Suggest new RSS feeds (especially non-tech sources)
 - 📝 Improve documentation
 - 🌍 Translate the app (coming in v1.1)
 
-**Good first issues:** Check issues tagged with [`good first issue`](https://github.com/yourusername/edgereader/labels/good%20first%20issue)
+**Good first issues:** Check issues tagged with [`good first issue`](https://github.com/CB2U/edgereader/labels/good%20first%20issue)
 
 ## 📄 License
 
@@ -161,9 +158,8 @@ This license was chosen to prevent commercial exploitation while keeping the pro
 
 ## 📞 Contact
 
-- **Issues/Bugs:** [GitHub Issues](https://github.com/yourusername/edgereader/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/yourusername/edgereader/discussions)
-- **Email:** your.email@example.com
+- **Issues/Bugs:** [GitHub Issues](https://github.com/CB2U/edgereader/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/CB2U/edgereader/discussions)
 - **Matrix:** `#edgereader:matrix.org` _(coming soon)_
 
 ## 💝 Support
@@ -172,7 +168,7 @@ EdgeReader is free and always will be. If you find it useful, consider:
 
 - ⭐ Starring this repo
 - 🐦 Sharing on social media
-- ☕ [Buy me a coffee](https://ko-fi.com/yourusername) _(optional, coming soon)_
+- ☕ [Buy me a coffee](https://ko-fi.com/CB2U) _(optional, coming soon)_
 - 🤝 Contributing code or documentation
 
 ---
