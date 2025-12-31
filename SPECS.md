@@ -33,7 +33,7 @@
 |----------------|-----------|-------------|------------|--------|------------|
 | 1.0 | Project Setup & Repository | [specs/010-project-setup/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/010-project-setup/) | BP0 | Done | AC-13 |
 | 1.1 | RSS Feed Parsing Foundation | [specs/011-rss-parsing/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/011-rss-parsing/) | BP0 | Done | FR-1 (partial), NFR-1, AC-1 (partial) |
-| 1.2 | Multi-Source Aggregation (10+ Sources) | `specs/003-multi-source/` | BP1 | Not started | FR-1, AC-1 |
+| 1.2 | Multi-Source Aggregation (10+ Sources) | [specs/012-multi-source/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/012-multi-source/) | BP1 | Done | FR-1, AC-1 |
 | 1.3 | External Browser Integration | `specs/004-external-browser/` | BP1 | Not started | FR-6, AC-4, NFR-1 |
 | 2.0 | User Preferences Storage | `specs/005-preferences-storage/` | BP2 | Not started | FR-2, FR-3, AC-3, NFR-1 |
 | 2.1 | On-Device Ranking Algorithm | `specs/006-ranking-algorithm/` | BP2 | Not started | FR-4, AC-2, AC-6 |

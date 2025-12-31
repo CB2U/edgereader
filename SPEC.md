@@ -10,18 +10,18 @@ It points to the spec folder for the current work and links to the product docs.
 - Constitution: constitution.md (or .specify/memory/constitution.md)
 
 ## Current focus
-- Roadmap anchor: 1.1
-- Spec folder: specs/011-rss-parsing/
+- Roadmap anchor: 1.2
+- Spec folder: specs/012-multi-source/
 - Type: Feature
 - Priority: P0
 - Status: Done
 - Next command:
-  - /specify 1.2
+  - /specify 1.3
 
 ## Links
-- spec.md: [specs/011-rss-parsing/spec.md](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/011-rss-parsing/spec.md)
-- plan.md: [specs/011-rss-parsing/plan.md](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/011-rss-parsing/plan.md)
-- tasks.md: [specs/011-rss-parsing/tasks.md](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/011-rss-parsing/tasks.md)
+- spec.md: [specs/012-multi-source/spec.md](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/012-multi-source/spec.md)
+- plan.md: [specs/012-multi-source/plan.md](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/012-multi-source/plan.md)
+- tasks.md: [specs/012-multi-source/tasks.md](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/012-multi-source/tasks.md)
 
 ## Notes
 - Keep this file short. Do not paste large requirements here.

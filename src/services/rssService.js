@@ -8,11 +8,25 @@ const parser = new XMLParser({
 const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
 const TEST_FEEDS = [
-    { name: 'Reuters World', url: 'https://feeds.reuters.com/reuters/worldNews', topic: 'General' },
-    { name: 'TechCrunch', url: 'https://techcrunch.com/feed/', topic: 'Technology' },
+    // General News (4)
+    { name: 'Reuters Tech', url: 'https://feeds.reuters.com/reuters/technologyNews', topic: 'General' },
     { name: 'BBC News', url: 'https://feeds.bbci.co.uk/news/rss.xml', topic: 'General' },
+    { name: 'NPR News', url: 'https://feeds.npr.org/1001/rss.xml', topic: 'General' },
+    { name: 'The Guardian World', url: 'https://www.theguardian.com/world/rss', topic: 'General' },
+
+    // Technology (7)
+    { name: 'TechCrunch', url: 'https://techcrunch.com/feed/', topic: 'Technology' },
     { name: 'Ars Technica', url: 'https://feeds.arstechnica.com/arstechnica/index', topic: 'Technology' },
     { name: 'The Verge', url: 'https://www.theverge.com/rss/index.xml', topic: 'Technology' },
+    { name: 'Hacker News', url: 'https://news.ycombinator.com/rss', topic: 'Technology' },
+    { name: 'Wired', url: 'https://www.wired.com/feed/rss', topic: 'Technology' },
+    { name: 'MIT Technology Review', url: 'https://www.technologyreview.com/feed/', topic: 'Technology' },
+    { name: 'Engadget', url: 'https://www.engadget.com/rss.xml', topic: 'Technology' },
+
+    // Science (3)
+    { name: 'ScienceDaily', url: 'https://www.sciencedaily.com/rss/all.xml', topic: 'Science' },
+    { name: 'Phys.org', url: 'https://phys.org/rss-feed/', topic: 'Science' },
+    { name: 'Nature News', url: 'https://www.nature.com/nature.rss', topic: 'Science' },
 ];
 
 /**
@@ -46,6 +60,8 @@ function normalizeItems(parsed, sourceName) {
             title: extractText(item.title, 'Untitled'),
             url: extractText(item.link || item.guid, '#'),
             source: sourceName,
+            description: extractText(item.description, null),
+            publishDate: item.pubDate ? new Date(item.pubDate) : null,
         }));
     }
 
@@ -59,6 +75,8 @@ function normalizeItems(parsed, sourceName) {
             title: extractText(item.title, 'Untitled'),
             url: item.link?.['@_href'] || extractText(item.id, '#'),
             source: sourceName,
+            description: extractText(item.summary || item.content, null),
+            publishDate: item.updated ? new Date(item.updated) : item.published ? new Date(item.published) : null,
         }));
     }
 

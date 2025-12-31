@@ -3,6 +3,26 @@ import { Container, Typography, Box, List, ListItem, ListItemText, CircularProgr
 import { fetchAllFeeds } from './services/rssService';
 import './App.css';
 
+/**
+ * Format a date as relative time (e.g., "2h ago", "3d ago", "Dec 30")
+ * @param {Date|null} date - Date to format
+ * @returns {string} Formatted relative date string
+ */
+function formatRelativeDate(date) {
+  if (!date) return '';
+
+  const now = new Date();
+  const diffMs = now - date;
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffHours < 1) return 'Just now';
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
 function App() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,9 +96,21 @@ function App() {
             >
               <ListItemText
                 primary={article.title}
-                secondary={article.source}
+                secondary={
+                  <>
+                    {article.description && (
+                      <Typography component="span" variant="body2" color="text.secondary" display="block" sx={{ mb: 0.5 }}>
+                        {article.description.length > 150
+                          ? article.description.substring(0, 150) + '...'
+                          : article.description}
+                      </Typography>
+                    )}
+                    <Typography component="span" variant="caption" color="text.secondary">
+                      {article.source}{article.publishDate && ` • ${formatRelativeDate(article.publishDate)}`}
+                    </Typography>
+                  </>
+                }
                 primaryTypographyProps={{ variant: 'body1', fontWeight: 500 }}
-                secondaryTypographyProps={{ variant: 'caption' }}
               />
             </ListItem>
           ))}
