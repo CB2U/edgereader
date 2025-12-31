@@ -13,20 +13,19 @@ It points to the spec folder for the current work and links to the product docs.
 
 ## Current focus
 
-- Roadmap anchor: (or N/A for unplanned work)
-- Spec folder:
-- Type: Bug | Feature | Change | Chore
-- Priority: P0 | P1 | P2
-- Status: Draft | In progress | Blocked | Done
+- Roadmap anchor: 1.0
+- Spec folder: specs/010-project-setup/
+- Type: Feature
+- Priority: P0
+- Status: In progress
 - Next command:
-  - /specify <anchor or summary>
-  - /implement_from_spec specs/<...>/
+  - /implement_from_spec specs/010-project-setup/
 
 ## Links
 
-- spec.md:
-- plan.md:
-- tasks.md:
+- spec.md: [specs/010-project-setup/spec.md](specs/010-project-setup/spec.md)
+- plan.md: [specs/010-project-setup/plan.md](specs/010-project-setup/plan.md)
+- tasks.md: [specs/010-project-setup/tasks.md](specs/010-project-setup/tasks.md)
 
 ## Notes
 
