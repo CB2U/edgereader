@@ -31,7 +31,7 @@
 
 | Roadmap Anchor | Epic Name | Spec Folder | Breakpoint | Status | Target ACs |
 |----------------|-----------|-------------|------------|--------|------------|
-| 1.0 | Project Setup & Repository | `specs/001-project-setup/` | BP0 | Not started | AC-13 |
+| 1.0 | Project Setup & Repository | [specs/010-project-setup/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/010-project-setup/) | BP0 | Done | AC-13 |
 | 1.1 | RSS Feed Parsing Foundation | `specs/002-rss-parsing/` | BP0 | Not started | FR-1 (partial), NFR-1, AC-1 (partial) |
 | 1.2 | Multi-Source Aggregation (10+ Sources) | `specs/003-multi-source/` | BP1 | Not started | FR-1, AC-1 |
 | 1.3 | External Browser Integration | `specs/004-external-browser/` | BP1 | Not started | FR-6, AC-4, NFR-1 |
