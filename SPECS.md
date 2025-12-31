@@ -35,7 +35,7 @@
 | 1.1 | RSS Feed Parsing Foundation | [specs/011-rss-parsing/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/011-rss-parsing/) | BP0 | Done | FR-1 (partial), NFR-1, AC-1 (partial) |
 | 1.2 | Multi-Source Aggregation (10+ Sources) | [specs/012-multi-source/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/012-multi-source/) | BP1 | Done | FR-1, AC-1 |
 | 1.3 | External Browser Integration | [specs/013-external-browser/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/013-external-browser/) | BP1 | Done | FR-6, AC-4, NFR-1 |
-| 2.0 | User Preferences Storage | `specs/005-preferences-storage/` | BP2 | Not started | FR-2, FR-3, AC-3, NFR-1 |
+| 2.0 | User Preferences Storage | [specs/020-preferences-storage/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/020-preferences-storage/) | BP2 | Done | FR-2, FR-3, AC-3, NFR-1 |
 | 2.1 | On-Device Ranking Algorithm | `specs/006-ranking-algorithm/` | BP2 | Not started | FR-4, AC-2, AC-6 |
 | 2.2 | Onboarding Flow | `specs/007-onboarding/` | BP2 | Not started | FR-7, AC-5, NFR-5 |
 | 3.0 | Local Database (Room) | `specs/008-room-database/` | BP3 | Not started | FR-10, AC-7 |
