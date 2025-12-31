@@ -1,6 +1,6 @@
 # EdgeReader Development Constitution
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Last Updated:** December 30, 2025  
 **Status:** ACTIVE
 
@@ -25,19 +25,19 @@ These principles are **immutable** and override all other considerations except 
 ### 2.1 Privacy (Absolute Requirements)
 
 **MUST:**
-- ✅ Store ALL user preferences locally on-device (DataStore or Room only)
-- ✅ Process ALL personalization on-device (ranking, filtering, ML if added)
-- ✅ Open articles in external browser via `Intent.ACTION_VIEW` (no in-app WebView)
-- ✅ Disable ALL analytics SDKs (Firebase Analytics, Google Analytics, etc.)
-- ✅ Implement crash reporting opt-out toggle (default: enabled, but user-controllable)
-- ✅ Scrub ALL PII from crash reports (no user preferences, article URLs, or identifiers)
+- ✅ Store ALL user preferences locally in browser (IndexedDB or LocalStorage only)
+- ✅ Process ALL personalization client-side (ranking, filtering, ML if added)
+- ✅ Open articles in new tab via `target="_blank"` or `window.open()` (no iframes)
+- ✅ Disable ALL analytics SDKs (Google Analytics, Mixpanel, etc.)
+- ✅ Implement error reporting opt-out toggle (default: enabled, but user-controllable)
+- ✅ Scrub ALL PII from error reports (no user preferences, article URLs, or identifiers)
 
 **MUST NOT:**
 - ❌ Transmit user preferences, reading history, or behavior to ANY server
-- ❌ Use ANY tracking SDKs, advertising IDs, or fingerprinting techniques
-- ❌ Store user data on cloud services (no Firebase Realtime Database, Cloud Firestore, etc.)
+- ❌ Use ANY tracking SDKs, advertising IDs, cookies, or fingerprinting techniques
+- ❌ Store user data on cloud services (no Firebase, Supabase, etc.)
 - ❌ Implement server-side user profiling or recommendation engines
-- ❌ Use Chrome Custom Tabs or in-app WebView (privacy risk)
+- ❌ Use iframes to display articles (privacy risk)
 
 **Threshold:** Zero exceptions. Any network call transmitting user data is a **critical violation**.
 
@@ -46,13 +46,14 @@ These principles are **immutable** and override all other considerations except 
 ### 2.2 Performance (Measurable Requirements)
 
 **MUST meet these thresholds:**
-- App startup time: **< 1 second** (cold start on mid-range device)
+- Initial page load: **< 2 seconds** (on 4G network)
 - Feed load time: **< 2 seconds** (on 4G network, 50+ articles)
 - UI responsiveness: **60 FPS minimum** during scrolling
-- Offline mode: Display cached articles (last 100 minimum) when offline
-- APK size: **< 25 MB** (excludes user data)
+- Offline mode: Display cached articles (last 100 minimum) when offline via Service Worker
+- Bundle size: **< 500 KB** (gzipped, excludes user data)
+- Lighthouse Performance score: **> 90**
 
-**Testing:** Performance MUST be validated on Android 8.0 (API 26) device with 2GB RAM before release.
+**Testing:** Performance MUST be validated on Chrome, Firefox, and Safari before release.
 
 ---
 
@@ -61,13 +62,14 @@ These principles are **immutable** and override all other considerations except 
 **MUST:**
 - ✅ Use HTTPS for all network requests (RSS feeds, APIs)
 - ✅ Validate and sanitize all user input (custom RSS URLs, keywords)
-- ✅ Implement certificate pinning for critical APIs (if using paid news APIs)
-- ✅ Store sensitive data (API keys if any) in BuildConfig or encrypted storage, NEVER in code
-- ✅ Follow OWASP Mobile Top 10 guidelines
+- ✅ Implement Content Security Policy (CSP) headers
+- ✅ Store sensitive data (API keys if any) in environment variables, NEVER in code
+- ✅ Follow OWASP Web Top 10 guidelines
 
 **MUST NOT:**
 - ❌ Hardcode API keys, tokens, or secrets in source code
 - ❌ Allow arbitrary code execution from fetched content
+- ❌ Use `eval()` or `innerHTML` with untrusted content
 - ❌ Store plaintext passwords or tokens (if future auth is added)
 
 ---
@@ -77,7 +79,7 @@ These principles are **immutable** and override all other considerations except 
 **MUST:**
 - ✅ Handle ALL network failures gracefully (show cached data + error message)
 - ✅ Validate RSS feed structure before parsing (prevent crashes from malformed XML)
-- ✅ Implement database migrations for Room schema changes
+- ✅ Implement IndexedDB schema versioning for data migrations
 - ✅ Preserve user preferences across app updates (no data loss)
 
 **Threshold:** Zero data loss during app updates. Test migration paths before release.
@@ -87,14 +89,14 @@ These principles are **immutable** and override all other considerations except 
 ### 2.5 Portability and Maintainability
 
 **MUST:**
-- ✅ Keep codebase simple (MVVM pattern, avoid over-engineering)
-- ✅ Use Kotlin standard library and Jetpack libraries (avoid exotic dependencies)
+- ✅ Keep codebase simple (component-based architecture, avoid over-engineering)
+- ✅ Use standard web APIs and popular libraries (React/Vue + Material UI)
 - ✅ Document all complex algorithms (ranking, parsing logic)
 - ✅ Write modular code (easy to swap RSS parser, add new sources)
 
 **MUST NOT:**
-- ❌ Introduce complex DI frameworks (Hilt/Dagger) for MVP (use simple constructors)
-- ❌ Use reflection or code generation beyond KSP for Room/Compose
+- ❌ Introduce complex state management (Redux/MobX) for MVP (use React Context or Vue Composition API)
+- ❌ Use experimental browser APIs without fallbacks
 - ❌ Lock code to specific vendors (keep news sources configurable)
 
 ---
@@ -174,16 +176,17 @@ All feature specs MUST include:
 
 **Unit Tests (MUST):**
 - All ranking algorithm logic MUST have unit tests (100% coverage)
-- All repository methods MUST have unit tests
-- All ViewModels MUST have unit tests for state transitions
+- All data access functions MUST have unit tests
+- All utility functions MUST have unit tests
 
-**UI Tests (SHOULD):**
-- Critical user flows SHOULD have Compose UI tests (onboarding, settings, feed)
+**Component Tests (SHOULD):**
+- Critical user flows SHOULD have component tests (onboarding, settings, feed)
 
 **Manual Testing (MUST):**
-- Test on at least 2 physical devices before release (one mid-range, one low-end)
-- Test offline mode (airplane mode)
-- Test crash reporting opt-out
+- Test on at least 3 browsers before release (Chrome, Firefox, Safari)
+- Test on mobile browsers (Chrome Mobile, Safari iOS)
+- Test offline mode (Service Worker)
+- Test error reporting opt-out
 
 **Threshold:** Ranking algorithm MUST have 100% test coverage. Other modules SHOULD aim for 80%+.
 
@@ -192,7 +195,7 @@ All feature specs MUST include:
 ### 4.2 Documentation Requirements
 
 **MUST document:**
-- All public APIs and complex algorithms (KDoc comments)
+- All public APIs and complex algorithms (JSDoc comments)
 - All new features in CHANGELOG.md
 - All breaking changes in migration guide
 - All third-party dependencies in README.md
@@ -209,13 +212,13 @@ All feature specs MUST include:
 **MUST handle:**
 - Network failures (no internet, timeout, DNS errors)
 - Malformed RSS feeds (invalid XML, missing fields)
-- Database errors (full storage, corruption)
-- Unexpected null values (use Kotlin null safety)
+- IndexedDB errors (quota exceeded, corruption)
+- Browser compatibility issues (feature detection)
 
 **Error UX MUST:**
 - Show user-friendly error messages (not stack traces)
 - Provide retry actions where applicable
-- Log errors for debugging (if crash reporting enabled)
+- Log errors for debugging (if error reporting enabled)
 
 **Threshold:** Zero unhandled exceptions in production. All `try-catch` blocks MUST have meaningful error recovery.
 
@@ -227,43 +230,59 @@ All feature specs MUST include:
 
 **MUST:**
 - Use HTTPS only (HTTP is forbidden except localhost)
-- Set connection timeout: 10 seconds
-- Set read timeout: 30 seconds
-- Include User-Agent: `EdgeReader/X.Y.Z (Android)`
+- Set fetch timeout: 10 seconds
+- Include User-Agent: `EdgeReader/X.Y.Z (Web)`
 - MUST NOT include any user identifiers in headers or query params
+- Handle CORS properly (use CORS proxies if needed for RSS feeds)
 
 **Example:**
-```kotlin
+```javascript
 // ✅ ALLOWED
-GET https://feeds.reuters.com/reuters/worldNews
-User-Agent: EdgeReader/1.0.0 (Android)
+fetch('https://feeds.reuters.com/reuters/worldNews', {
+  headers: { 'User-Agent': 'EdgeReader/1.0.0 (Web)' }
+})
 
 // ❌ FORBIDDEN
-GET https://api.example.com/news?userId=12345
+fetch('https://api.example.com/news?userId=12345')
 ```
 
 ---
 
-### 5.2 Crash Reporting
+### 5.2 Error Reporting
 
 **MUST:**
-- Check user preference before initializing crash reporting SDK
-- Strip all PII from crash logs (use `beforeSend` callback)
+- Check user preference before initializing error reporting SDK (Sentry)
+- Strip all PII from error logs (use `beforeSend` callback)
 - Remove breadcrumbs containing article URLs or user actions
-- Include only: stack trace, device model, OS version, app version
+- Include only: stack trace, browser, OS, app version
 
-**Code Review Requirement:** All crash reporting changes MUST be reviewed for PII leaks.
+**Code Review Requirement:** All error reporting changes MUST be reviewed for PII leaks.
 
 ---
 
-### 5.3 Permissions
+### 5.3 Browser Permissions
 
 **MUST only request:**
-- `INTERNET` (required for fetching feeds)
-- `ACCESS_NETWORK_STATE` (optional, for connectivity checks)
+- Service Worker registration (for offline mode)
+- Notifications (optional, for future features)
 
 **MUST NOT request:**
-- Location, camera, contacts, storage, or any other sensitive permissions
+- Location, camera, microphone, or any other sensitive permissions
+
+---
+
+### 5.4 Content Security Policy
+
+**MUST implement CSP headers:**
+```
+Content-Security-Policy: 
+  default-src 'self'; 
+  script-src 'self'; 
+  style-src 'self' 'unsafe-inline'; 
+  img-src 'self' https:; 
+  connect-src 'self' https://feeds.* https://api.*;
+  frame-ancestors 'none';
+```
 
 ---
 
@@ -279,24 +298,24 @@ Every feature MUST meet these criteria before merging:
 - [ ] Requirements map to PRD (no scope drift)
 
 **Implementation:**
-- [ ] Code follows Kotlin style guide
+- [ ] Code follows project style guide (ESLint/Prettier)
 - [ ] Code compiles without warnings
-- [ ] No hardcoded strings (use strings.xml)
+- [ ] No hardcoded strings (use i18n if applicable)
 - [ ] No magic numbers (use named constants)
 
 **Testing:**
 - [ ] Unit tests written (if applicable)
 - [ ] Manual testing completed (positive + negative cases)
 - [ ] Offline mode tested (if applicable)
-- [ ] Performance thresholds met (< 1s startup, < 2s load)
+- [ ] Performance thresholds met (< 2s load, Lighthouse > 90)
 
 **Privacy:**
-- [ ] No user data transmitted to servers (verified with network inspector)
-- [ ] All data stored locally (DataStore or Room)
-- [ ] Crash reports scrubbed (if applicable)
+- [ ] No user data transmitted to servers (verified with browser DevTools Network tab)
+- [ ] All data stored locally (IndexedDB or LocalStorage)
+- [ ] Error reports scrubbed (if applicable)
 
 **Documentation:**
-- [ ] KDoc comments for public APIs
+- [ ] JSDoc comments for public APIs
 - [ ] CHANGELOG.md updated
 - [ ] README.md updated (if user-facing change)
 
@@ -304,12 +323,13 @@ Every feature MUST meet these criteria before merging:
 - [ ] No unhandled exceptions
 - [ ] Error messages are user-friendly
 - [ ] UI follows Material Design 3
-- [ ] Accessibility: content descriptions for images
+- [ ] Accessibility: ARIA labels, keyboard navigation
 
 **Before Release:**
-- [ ] Tested on Android 8.0 (API 26) and Android 14+
-- [ ] APK size < 25 MB
-- [ ] ProGuard rules verified (no crashes in release build)
+- [ ] Tested on Chrome, Firefox, Safari (desktop + mobile)
+- [ ] Bundle size < 500 KB (gzipped)
+- [ ] Lighthouse scores: Performance > 90, Accessibility > 95, Best Practices > 90, SEO > 90
+- [ ] PWA manifest and Service Worker configured
 
 ---
 
@@ -329,7 +349,7 @@ This constitution is **stable** and may only be modified under these conditions:
 1. Propose change in GitHub issue with `constitution-amendment` label
 2. Document rationale (why is current rule insufficient?)
 3. Update CONSTITUTION.md with version bump
-4. Commit with message: `Constitution v1.X: [Brief description]`
+4. Commit with message: `Constitution v2.X: [Brief description]`
 
 **Forbidden Changes:**
 - ❌ Weakening privacy guarantees (Section 2.1)
@@ -368,13 +388,13 @@ These features are **explicitly out of scope** for MVP and MUST NOT be implement
 - ❌ User accounts or login
 - ❌ Cloud sync
 - ❌ Social features (sharing, comments, likes)
-- ❌ In-app article reader/WebView
+- ❌ In-app article reader/iframe
 - ❌ Push notifications
 - ❌ Advanced ML models (beyond simple scoring)
 - ❌ Monetization (ads, subscriptions, in-app purchases)
-- ❌ iOS version
+- ❌ Native mobile apps (Android/iOS)
 
-**Rationale:** These require significant complexity and risk scope creep. Focus on Android MVP first.
+**Rationale:** These require significant complexity and risk scope creep. Focus on PWA MVP first.
 
 ---
 
@@ -386,7 +406,7 @@ Before adding ANY new feature, answer these questions:
 2. Does it align with "privacy-first" principle? (If no → STOP)
 3. Can it be implemented without server-side components? (If no → STOP)
 4. Is it required for MVP or post-MVP? (If post-MVP → defer)
-5. Does it add < 1 MB to APK size? (If no → justify or stop)
+5. Does it add < 50 KB to bundle size? (If no → justify or stop)
 
 **If 3+ answers are "no" → Feature is REJECTED.**
 
@@ -399,17 +419,18 @@ All PRs (or self-reviews) MUST verify:
 **Privacy:**
 - [ ] No network calls with user data
 - [ ] All data stored locally (no cloud)
-- [ ] Crash reports scrubbed
+- [ ] Error reports scrubbed
 
 **Performance:**
 - [ ] No blocking operations on main thread
-- [ ] Images loaded asynchronously
-- [ ] Database queries optimized
+- [ ] Images loaded lazily
+- [ ] Database queries optimized (IndexedDB)
 
 **Security:**
 - [ ] HTTPS only
 - [ ] Input validation present
 - [ ] No hardcoded secrets
+- [ ] CSP headers configured
 
 **Quality:**
 - [ ] Tests written
@@ -447,12 +468,13 @@ All PRs (or self-reviews) MUST verify:
 ### Privacy Checklist (Before Every Commit)
 - ✅ Is all data local?
 - ✅ Are all network calls anonymized?
-- ✅ Is crash reporting opt-outable?
+- ✅ Is error reporting opt-outable?
 
 ### Performance Checklist
-- ✅ Startup < 1s?
+- ✅ Page load < 2s?
 - ✅ Feed load < 2s?
 - ✅ 60 FPS scrolling?
+- ✅ Lighthouse > 90?
 
 ### Spec-Driven Checklist
 - ✅ Spec written?
@@ -474,9 +496,10 @@ If the answer is unclear, **stop and clarify** before proceeding.
 
 ---
 
-**Document Version:** 1.0  
+**Document Version:** 2.0  
 **Next Review:** After MVP completion  
 **Maintained By:** Project maintainer (solo dev)  
 
 **Change Log:**
-- 2025-12-30: Initial constitution v1.0
+- 2025-12-30: v2.0 - Updated for PWA platform (IndexedDB/LocalStorage, browser-based, Service Workers, Lighthouse metrics, CSP, bundle size)
+- 2025-12-30: v1.0 - Initial constitution (Android native)

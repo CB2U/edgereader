@@ -2,21 +2,22 @@
 
 ## 1. Summary
 
-**EdgeReader** is a privacy-focused news aggregator for Android (iOS future roadmap) that delivers personalized news feeds without tracking or data collection. All personalization happens on-device using explicit user preferences (topics, sources, keywords). Articles open in the user's default browser to leverage external privacy and ad-blocking features.
+**EdgeReader** is a privacy-focused news aggregator Progressive Web App (PWA) that delivers personalized news feeds without tracking or data collection. All personalization happens client-side using explicit user preferences (topics, sources, keywords). Articles open in the user's default browser to leverage external privacy and ad-blocking features.
 
 **Project name:** EdgeReader  
-**Package name:** `dev.edgereader.app`  
-**Target platforms:** Android (MVP), iOS (post-MVP)  
+**App URL:** `https://edgereader.app` (or Antigravity-hosted URL)  
+**Target platforms:** PWA (works on Android, iOS, desktop via browser)  
 **Core differentiation:** Zero tracking, on-device personalization, edge computing principles  
 **Primary competitor reference:** Google News (UX/layout inspiration only)  
 **Open source:** Yes (GPL-3.0 license)  
-**Tagline:** "News aggregation at the edge. Your content, your device, zero tracking."
+**Tagline:** "News aggregation at the edge. Your content, your device, zero tracking."  
+**Development Tool:** Google Antigravity (DeepAgent)
 
 ---
 
 ## 2. Problem Statement
 
-Existing news aggregator apps (Google News, Apple News, Flipboard) collect extensive user data for personalization, creating privacy concerns. Users seeking privacy-respecting alternatives must sacrifice personalized content curation or use fragmented solutions (individual RSS readers, browser bookmarks). There is no mainstream mobile news app that combines:
+Existing news aggregator apps (Google News, Apple News, Flipboard) collect extensive user data for personalization, creating privacy concerns. Users seeking privacy-respecting alternatives must sacrifice personalized content curation or use fragmented solutions (individual RSS readers, browser bookmarks). There is no mainstream news aggregator (web or mobile) that combines:
 - Multi-source aggregation
 - Personalized recommendations
 - Strong privacy guarantees (on-device processing, no tracking)
@@ -42,7 +43,7 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 
 ## 4. User Stories (Prioritized)
 
-**MVP (P0) - Android Only:**
+**MVP (P0) - PWA (All Platforms):**
 1. As a user, I want to browse aggregated news headlines from multiple sources so I can stay informed without visiting individual sites.
 2. As a user, I want to select topics/categories I care about so the app prioritizes relevant articles.
 3. As a user, I want to tap an article and have it open in my default browser so I can read with my existing privacy protections.
@@ -56,8 +57,8 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 9. As a user, I want dark mode so the app is comfortable to use at night.
 
 **Future (P2):**
-10. As a user, I want an iOS version of the app so I can use it on my iPad/iPhone.
-11. As a user, I want lightweight on-device ML recommendations so the app learns what I like without sending data off-device.
+10. As a user, I want native mobile apps (Android/iOS) for deeper OS integration (optional, PWA works cross-platform).
+11. As a user, I want lightweight client-side ML recommendations so the app learns what I like without sending data off-device.
 
 ---
 
@@ -72,9 +73,9 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 - Individual sources (enable/disable per source)
 - Keywords or search terms for boosting/filtering
 
-**FR-3:** Store all user preferences locally on-device (no cloud sync, no server-side storage).
+**FR-3:** Store all user preferences locally in browser storage (IndexedDB/LocalStorage, no cloud sync, no server-side storage).
 
-**FR-4:** Implement on-device ranking algorithm that scores articles based on user preferences (topic match, source priority, keyword presence, recency).
+**FR-4:** Implement client-side ranking algorithm that scores articles based on user preferences (topic match, source priority, keyword presence, recency).
 
 **FR-5:** Display ranked feed of articles in a scrollable list/card layout, showing:
 - Headline
@@ -90,7 +91,7 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 
 **FR-9:** Refresh feed on user pull-to-refresh or app launch (fetch latest articles from sources).
 
-**FR-10:** Cache articles locally for offline viewing of previously loaded headlines (text/metadata only, not full article content).
+**FR-10:** Cache articles locally using Service Workers for offline viewing of previously loaded headlines (text/metadata only, not full article content).
 
 **FR-11:** Provide opt-out toggle for anonymous crash reporting in settings screen. Default state: **enabled** (user can disable).
 
@@ -110,14 +111,14 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 
 **NFR-4 (Performance):** App startup time under 1 second on mid-range Android devices (2-year-old flagship equivalent).
 
-**NFR-5 (UX):** UI should follow Material Design 3 guidelines for familiarity and modern Android aesthetics.
+**NFR-5 (UX):** UI should follow Material Design 3 guidelines for familiarity and modern web aesthetics.
 
-**NFR-6 (Legal/Compliance):** Comply with Google Play policies, including:
+**NFR-6 (Legal/Compliance):** Comply with web standards and hosting policies, including:
 - Accurate privacy policy and data safety declarations
 - Proper attribution of news sources
 - No copyright violations (link to sources, don't scrape full text)
 
-**NFR-7 (Maintainability):** Codebase should support solo developer maintenance; prioritize simplicity and readability over advanced architecture.
+**NFR-7 (Maintainability):** Codebase should support solo developer maintenance using Antigravity; prioritize simplicity and readability over advanced architecture.
 
 **NFR-8 (Scalability):** Design should allow adding new news sources via configuration (not hardcoded) for easy expansion.
 
@@ -133,7 +134,7 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 
 **AC-3 (FR-3, NFR-1):** Given the user has set preferences, when network traffic is inspected, then no user preference data is transmitted to any server.
 
-**AC-4 (FR-6):** Given an article is displayed, when the user taps it, then the article URL opens in the device's default browser (verified by testing with Brave, Chrome, Firefox).
+**AC-4 (FR-6):** Given an article is displayed, when the user clicks it, then the article URL opens in a new browser tab (target=_blank).
 
 **AC-5 (FR-7):** Given the app is installed and launched for the first time, when the user completes onboarding, then at least 3 topics or sources must be selected before proceeding to the main feed.
 
@@ -141,15 +142,15 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 
 **AC-7 (FR-10):** Given the user has previously loaded the feed, when the device is offline, then cached article headlines and metadata are still displayed (at least last 100 articles).
 
-**AC-8 (NFR-3, NFR-4):** Given the app is tested on a mid-range Android device, when launched, then startup time is under 1 second and feed loads within 2 seconds on 4G.
+**AC-8 (NFR-3, NFR-4):** Given the app is tested on a mid-range device browser, when launched, then page load time is under 1 second and feed loads within 2 seconds on 4G.
 
 **AC-9 (FR-11, FR-12):** Given the user opens settings, when they toggle crash reporting off, then no crash data is sent to any server even if a crash occurs.
 
 **AC-10 (FR-11, FR-12):** Given crash reporting is enabled and a crash occurs, when crash logs are inspected, then they contain no user preferences, article URLs, or any identifiable information beyond device model, OS version, and stack trace.
 
-**AC-11 (NFR-6):** Given the app is submitted to Google Play, when reviewed, then it passes all privacy and content policy checks.
+**AC-11 (NFR-6):** Given the app is deployed to web hosting, when accessed, then it loads correctly and passes privacy audits.
 
-**AC-12 (FR-5, NFR-5):** Given the feed is displayed, when evaluated against Material Design 3 guidelines, then it uses modern components (Material You theming, elevation, typography).
+**AC-12 (FR-5, NFR-5):** Given the feed is displayed, when evaluated against Material Design 3 guidelines, then it uses modern web components (Material Web Components or Material UI, elevation, typography).
 
 **AC-13 (NFR-9):** Given the code is published on GitHub, when a third party views the repository, then the GPL-3.0 license is clearly stated in LICENSE file and README.
 
@@ -157,8 +158,8 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 
 ## 7. MVP Scope
 
-### In-Scope (MVP - Android Only)
-- Native Android app (Kotlin + Jetpack Compose recommended)
+### In-Scope (MVP - PWA)
+- Progressive Web App (React/Vue + Material UI recommended)
 - Aggregation from 10-15 free news sources (RSS feeds + free-tier NewsAPI/GNews for diversity)
 - On-device preference selection (topics, sources, keywords)
 - Simple on-device ranking algorithm (weighted scoring based on preferences)
@@ -170,9 +171,11 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 - Anonymous crash reporting with opt-out (default: enabled)
 - Open-source GitHub repository with GPL-3.0 license
 - Basic Material Design 3 UI
+- PWA manifest and Service Worker for offline support
+- Installable to home screen (Add to Home Screen)
 
 ### Out-of-Scope (MVP)
-- iOS version (post-MVP, P2 priority)
+- Native mobile apps (post-MVP, P2 priority - PWA works cross-platform)
 - User accounts, login, or cloud sync
 - Social features (sharing, comments, likes)
 - In-app article reader or WebView
@@ -219,40 +222,54 @@ EdgeReader solves this by bringing edge computing principles to news aggregation
 
 ## 10. Technical Recommendations
 
-### 10.1 Tech Stack (Solo Android Development)
+### 10.1 Tech Stack (PWA Development with Antigravity)
 
-**Recommended: Native Android (Kotlin + Jetpack Compose)**
+**Recommended: React + Material UI + Vite**
 
 **Rationale:**
-- **Solo Android development:** No need for cross-platform overhead since iOS is out of scope
-- **Best performance:** Native code, no JavaScript bridge or Flutter rendering layer
-- **Modern toolkit:** Jetpack Compose provides declarative UI (similar to Flutter/React) with Material Design 3 built-in
-- **Ecosystem maturity:** Direct access to Android APIs, better debugging, extensive documentation
-- **Future-proofing:** Easier to maintain long-term as a solo developer; Google's recommended approach for new Android apps
-- **Open-source community:** Large Kotlin/Android community on GitHub for reference projects
+- **Antigravity native:** DeepAgent excels at building React-based web apps
+- **Cross-platform by default:** Works on Android, iOS, desktop browsers
+- **No build tools needed:** Antigravity handles deployment and hosting
+- **Modern toolkit:** React provides declarative UI similar to Jetpack Compose
+- **Material Design 3:** Material UI (MUI) provides ready-made components
+- **PWA support:** Service Workers for offline mode, manifest for installability
+- **Future-proofing:** Easy to maintain as solo developer with Antigravity assistance
 
 **Key libraries:**
-- **Retrofit** + **OkHttp**: HTTP networking with caching support
-- **kotlinx.serialization** or **Moshi**: JSON parsing
-- **Room**: Local SQLite database for article caching
-- **DataStore**: Modern replacement for SharedPreferences (user preferences)
-- **Coil**: Image loading and caching
-- **Rome/rssparser**: RSS feed parsing (or custom XML parser)
-- **Firebase Crashlytics** (with analytics disabled) or **Sentry Android SDK**: Crash reporting
+- **React 18+**: UI framework
+- **Material UI (MUI v5+)**: Material Design 3 components
+- **Vite**: Fast build tool (handled by Antigravity)
+- **rss-parser**: RSS feed parsing
+- **axios**: HTTP client for fetching feeds
+- **idb (IndexedDB wrapper)**: Local storage for articles and preferences
+- **Workbox**: Service Worker management for offline support
+- **Sentry Browser SDK**: Crash/error reporting (optional)
 
-**Package naming convention:**
-```kotlin
-// Primary package
-dev.edgereader.app
-
-// Sub-packages
-dev.edgereader.app.ui
-dev.edgereader.app.data
-dev.edgereader.app.util
+**Project structure:**
+```
+edgereader/
+├── src/
+│   ├── components/
+│   │   ├── FeedList.jsx
+│   │   ├── ArticleCard.jsx
+│   │   ├── SettingsPanel.jsx
+│   │   └── OnboardingFlow.jsx
+│   ├── services/
+│   │   ├── rssService.js
+│   │   ├── storageService.js
+│   │   └── rankingService.js
+│   ├── utils/
+│   │   └── preferences.js
+│   ├── App.jsx
+│   └── main.jsx
+├── public/
+│   ├── manifest.json (PWA manifest)
+│   └── service-worker.js
+└── package.json
 ```
 
-**Alternative (if you prefer cross-platform skills):**
-- **Flutter**: Still viable if you want to learn Flutter or plan iOS version soon. But for solo Android-first project, native Kotlin is more straightforward.
+**Alternative (if you prefer Vue):**
+- **Vue 3 + Vuetify**: Similar benefits, Antigravity supports both
 
 ---
 
@@ -260,332 +277,327 @@ dev.edgereader.app.util
 
 **Primary Strategy: RSS Feeds (Free, Unlimited)**
 
-Use RSS as the main data source to avoid API costs and rate limits:
+Same RSS feed list as Android version, but with CORS considerations:
 
-**Curated RSS Feed List (10-15 sources to start):**
+**CORS Handling:**
+- Some RSS feeds may block browser requests (CORS policy)
+- **Solution 1:** Use CORS proxy (e.g., `https://api.allorigins.win/raw?url=`)
+- **Solution 2:** Antigravity can create a simple backend proxy endpoint
+- **Solution 3:** Use RSS-to-JSON services (e.g., `rss2json.com` free tier)
 
-```kotlin
-// Example feed configuration (store in local JSON or hardcoded)
-val DEFAULT_FEEDS = listOf(
-    Feed("Reuters World", "https://feeds.reuters.com/reuters/worldNews", "General"),
-    Feed("Reuters Tech", "https://feeds.reuters.com/reuters/technologyNews", "Technology"),
-    Feed("BBC News", "https://feeds.bbci.co.uk/news/rss.xml", "General"),
-    Feed("TechCrunch", "https://techcrunch.com/feed/", "Technology"),
-    Feed("Ars Technica", "https://feeds.arstechnica.com/arstechnica/index", "Technology"),
-    Feed("The Verge", "https://www.theverge.com/rss/index.xml", "Technology"),
-    Feed("Hacker News", "https://news.ycombinator.com/rss", "Technology"),
-    Feed("ScienceDaily", "https://www.sciencedaily.com/rss/all.xml", "Science"),
-    Feed("Phys.org", "https://phys.org/rss-feed/", "Science"),
-    Feed("NPR News", "https://feeds.npr.org/1001/rss.xml", "General"),
-    Feed("The Guardian World", "https://www.theguardian.com/world/rss", "General"),
-    Feed("Wired", "https://www.wired.com/feed/rss", "Technology"),
-    Feed("MIT Technology Review", "https://www.technologyreview.com/feed/", "Technology"),
-    Feed("Engadget", "https://www.engadget.com/rss.xml", "Technology"),
-    Feed("Nature News", "https://www.nature.com/nature.rss", "Science")
-)
+**Curated RSS Feed List (10-15 sources):**
+
+```javascript
+// Example feed configuration
+const DEFAULT_FEEDS = [
+    { name: "Reuters World", url: "https://feeds.reuters.com/reuters/worldNews", topic: "General" },
+    { name: "Reuters Tech", url: "https://feeds.reuters.com/reuters/technologyNews", topic: "Technology" },
+    { name: "BBC News", url: "https://feeds.bbci.co.uk/news/rss.xml", topic: "General" },
+    { name: "TechCrunch", url: "https://techcrunch.com/feed/", topic: "Technology" },
+    { name: "Ars Technica", url: "https://feeds.arstechnica.com/arstechnica/index", topic: "Technology" },
+    { name: "The Verge", url: "https://www.theverge.com/rss/index.xml", topic: "Technology" },
+    { name: "Hacker News", url: "https://news.ycombinator.com/rss", topic: "Technology" },
+    { name: "ScienceDaily", url: "https://www.sciencedaily.com/rss/all.xml", topic: "Science" },
+    { name: "Phys.org", url: "https://phys.org/rss-feed/", topic: "Science" },
+    { name: "NPR News", url: "https://feeds.npr.org/1001/rss.xml", topic: "General" },
+    { name: "The Guardian World", url: "https://www.theguardian.com/world/rss", topic: "General" },
+    { name: "Wired", url: "https://www.wired.com/feed/rss", topic: "Technology" },
+    { name: "MIT Technology Review", url: "https://www.technologyreview.com/feed/", topic: "Technology" },
+    { name: "Engadget", url: "https://www.engadget.com/rss.xml", topic: "Technology" },
+    { name: "Nature News", url: "https://www.nature.com/nature.rss", topic: "Science" }
+];
 ```
 
-**Secondary: Free-Tier News APIs (Optional, for diversity)**
-
-1. **NewsAPI.org** (100 requests/day free)
-   - Use sparingly for broad topic queries
-   - Example: Fetch "top headlines" once per day as supplement
-   
-2. **GNews API** (100 requests/day free)
-   - Backup for when RSS feeds are down
-   - Geographic diversity (international news)
-
-**User-Provided Feeds (Post-MVP):**
-- Allow users to add custom RSS URLs in settings
-- Validate feed format before saving
-
 **Implementation Notes:**
-- **Caching:** Store fetched articles in Room database with timestamp; refresh every 30 minutes
-- **Parsing:** Use `Rome` library for robust RSS/Atom parsing
+- **Caching:** Store fetched articles in IndexedDB with timestamp; refresh every 30 minutes
+- **Parsing:** Use `rss-parser` library for robust RSS/Atom parsing
 - **Error handling:** If a feed fails, log error but don't block other feeds
-- **Topic tagging:** Map feed to default topic (e.g., TechCrunch → Technology), allow user override
+- **Topic tagging:** Map feed to default topic, allow user override
 
 ---
 
-### 10.3 On-Device Personalization (Kotlin Implementation)
+### 10.3 Client-Side Personalization (JavaScript Implementation)
 
 **Algorithm Overview:**
 
-```kotlin
-data class Article(
-    val title: String,
-    val description: String,
-    val url: String,
-    val source: String,
-    val publishDate: Long, // Unix timestamp
-    val topic: String, // Technology, Science, General, etc.
-    val imageUrl: String? = null
-)
+```javascript
+// Data models
+const Article = {
+    title: String,
+    description: String,
+    url: String,
+    source: String,
+    publishDate: Number, // Unix timestamp
+    topic: String,
+    imageUrl: String
+};
 
-data class UserPreferences(
-    val selectedTopics: Set<String> = setOf(),
-    val enabledSources: Set<String> = setOf(),
-    val disabledSources: Set<String> = setOf(),
-    val keywords: Set<String> = setOf()
-)
+const UserPreferences = {
+    selectedTopics: Set,
+    enabledSources: Set,
+    disabledSources: Set,
+    keywords: Set
+};
 
-fun scoreArticle(article: Article, prefs: UserPreferences): Double {
-    var score = 0.0
-    
+// Scoring function
+function scoreArticle(article, prefs) {
+    let score = 0;
+
     // 1. Recency bonus (decay over 24 hours)
-    val hoursAgo = (System.currentTimeMillis() - article.publishDate) / (1000 * 60 * 60)
-    score += maxOf(0.0, 100.0 - hoursAgo)
-    
+    const hoursAgo = (Date.now() - article.publishDate) / (1000 * 60 * 60);
+    score += Math.max(0, 100 - hoursAgo);
+
     // 2. Topic match (strong signal)
-    if (article.topic in prefs.selectedTopics) {
-        score += 50.0
+    if (prefs.selectedTopics.has(article.topic)) {
+        score += 50;
     }
-    
+
     // 3. Source filtering and priority
-    when {
-        article.source in prefs.disabledSources -> score -= 1000.0 // Effectively hide
-        article.source in prefs.enabledSources -> score += 30.0
+    if (prefs.disabledSources.has(article.source)) {
+        score -= 1000; // Effectively hide
+    } else if (prefs.enabledSources.has(article.source)) {
+        score += 30;
     }
-    
+
     // 4. Keyword matching (title and description)
-    val textToSearch = "${article.title} ${article.description}".lowercase()
-    prefs.keywords.forEach { keyword ->
-        if (keyword.lowercase() in textToSearch) {
-            score += 20.0
+    const textToSearch = `${article.title} ${article.description}`.toLowerCase();
+    prefs.keywords.forEach(keyword => {
+        if (textToSearch.includes(keyword.toLowerCase())) {
+            score += 20;
         }
-    }
-    
-    return score
+    });
+
+    return score;
 }
 
-// Usage in ViewModel or Repository
-fun getRankedArticles(articles: List<Article>, prefs: UserPreferences): List<Article> {
+// Usage
+function getRankedArticles(articles, prefs) {
     return articles
-        .filter { scoreArticle(it, prefs) > -500 } // Remove heavily downscored articles
-        .sortedByDescending { scoreArticle(it, prefs) }
+        .filter(article => scoreArticle(article, prefs) > -500)
+        .sort((a, b) => scoreArticle(b, prefs) - scoreArticle(a, prefs));
 }
 ```
 
-**Storage (DataStore Preferences):**
+**Storage (IndexedDB + LocalStorage):**
 
-```kotlin
-// PreferencesManager.kt
-class PreferencesManager(private val context: Context) {
-    private val dataStore = context.dataStore
-    
-    val userPreferences: Flow<UserPreferences> = dataStore.data.map { prefs ->
-        UserPreferences(
-            selectedTopics = prefs[TOPICS_KEY]?.split(",")?.toSet() ?: setOf(),
-            keywords = prefs[KEYWORDS_KEY]?.split(",")?.toSet() ?: setOf(),
-            enabledSources = prefs[ENABLED_SOURCES_KEY]?.split(",")?.toSet() ?: setOf(),
-            disabledSources = prefs[DISABLED_SOURCES_KEY]?.split(",")?.toSet() ?: setOf()
-        )
-    }
-    
-    suspend fun updateTopics(topics: Set<String>) {
-        dataStore.edit { prefs ->
-            prefs[TOPICS_KEY] = topics.joinToString(",")
+```javascript
+// Using idb library for IndexedDB
+import { openDB } from 'idb';
+
+const DB_NAME = 'edgereader';
+const PREFS_KEY = 'userPreferences';
+
+// Initialize database
+async function initDB() {
+    return openDB(DB_NAME, 1, {
+        upgrade(db) {
+            db.createObjectStore('articles', { keyPath: 'url' });
+            db.createObjectStore('preferences');
         }
-    }
-    
-    // Similar methods for keywords, sources...
-    
-    companion object {
-        private val TOPICS_KEY = stringPreferencesKey("selected_topics")
-        private val KEYWORDS_KEY = stringPreferencesKey("keywords")
-        private val ENABLED_SOURCES_KEY = stringPreferencesKey("enabled_sources")
-        private val DISABLED_SOURCES_KEY = stringPreferencesKey("disabled_sources")
-    }
+    });
+}
+
+// Save preferences
+async function savePreferences(prefs) {
+    const db = await initDB();
+    await db.put('preferences', prefs, PREFS_KEY);
+}
+
+// Load preferences
+async function loadPreferences() {
+    const db = await initDB();
+    return await db.get('preferences', PREFS_KEY) || {
+        selectedTopics: new Set(),
+        enabledSources: new Set(),
+        disabledSources: new Set(),
+        keywords: new Set()
+    };
 }
 ```
 
 ---
 
-### 10.4 Opening Links in External Browser (Kotlin)
+### 10.4 Opening Links in External Browser (JavaScript)
 
-```kotlin
-// In your Composable or Activity
-fun openArticleInBrowser(context: Context, url: String) {
-    try {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-            // Force external browser (not Chrome Custom Tabs)
-            addCategory(Intent.CATEGORY_BROWSABLE)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        context.startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        // Handle error: no browser installed (rare)
-        Toast.makeText(context, "No browser found", Toast.LENGTH_SHORT).show()
-    }
+```javascript
+// In React component
+function ArticleCard({ article }) {
+    const handleClick = () => {
+        // Opens in new tab, respects user's default browser
+        window.open(article.url, '_blank', 'noopener,noreferrer');
+    };
+
+    return (
+        <Card onClick={handleClick} style={{ cursor: 'pointer' }}>
+            <CardContent>
+                <Typography variant="h6">{article.title}</Typography>
+                <Typography variant="body2">{article.source}</Typography>
+            </CardContent>
+        </Card>
+    );
 }
 
-// Usage in Compose UI
-@Composable
-fun ArticleCard(article: Article, onClick: (String) -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick(article.url) }
-    ) {
-        // Card content: title, source, image, etc.
-    }
-}
-
-// In parent composable
-ArticleCard(article = article) { url ->
-    openArticleInBrowser(context, url)
+// Or use anchor tag
+function ArticleCard({ article }) {
+    return (
+        <a href={article.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <Card>
+                <CardContent>
+                    <Typography variant="h6">{article.title}</Typography>
+                    <Typography variant="body2">{article.source}</Typography>
+                </CardContent>
+            </Card>
+        </a>
+    );
 }
 ```
 
-**Why not Chrome Custom Tabs?**
-- Custom Tabs provide in-app browser experience (faster, warmer start)
-- **But:** They may track navigation (depending on user's Chrome settings)
-- **For privacy app:** Better to use `Intent.ACTION_VIEW` to respect user's default browser choice (Brave, Firefox Focus, etc.)
-- **Tradeoff:** Slightly slower load time, but stronger privacy guarantee
+**Why `target="_blank"`?**
+- Opens in new tab (user stays on EdgeReader)
+- `noopener` and `noreferrer` prevent tracking via `window.opener`
+- Respects user's browser choice (Brave, Firefox, etc.)
 
 ---
 
-### 10.5 Crash Reporting Implementation
+### 10.5 Crash/Error Reporting Implementation
 
-**Option 1: Firebase Crashlytics (Simplest)**
+**Option 1: Sentry Browser SDK (Recommended for PWA)**
 
-```kotlin
-// build.gradle.kts
-dependencies {
-    implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.0")
-    implementation("com.google.firebase:firebase-analytics-ktx:21.5.0") // Required but disable
-}
+```javascript
+// Install: npm install @sentry/react
+import * as Sentry from "@sentry/react";
 
-// In Application class or MainActivity
-class EdgeReaderApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        
-        // Read crash reporting preference
-        val prefsManager = PreferencesManager(this)
-        runBlocking {
-            prefsManager.isCrashReportingEnabled().first().let { enabled ->
-                FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(enabled)
-            }
-        }
-        
-        // Disable Firebase Analytics entirely
-        Firebase.analytics.setAnalyticsCollectionEnabled(false)
+// Initialize in main.jsx
+Sentry.init({
+    dsn: "your-sentry-dsn",
+    enabled: getUserPreference('crashReportingEnabled'), // Check user preference
+    beforeSend(event) {
+        // Scrub PII
+        delete event.user;
+        delete event.request;
+        event.breadcrumbs = []; // Remove navigation history
+        return event;
     }
-}
+});
 
-// In settings screen, allow user to toggle
-@Composable
-fun SettingsScreen(prefsManager: PreferencesManager) {
-    val crashReportingEnabled by prefsManager.isCrashReportingEnabled()
-        .collectAsState(initial = true)
-    
-    SwitchPreference(
-        title = "Anonymous Crash Reporting",
-        summary = "Helps improve EdgeReader stability. No personal data collected.",
-        checked = crashReportingEnabled,
-        onCheckedChange = { enabled ->
-            scope.launch {
-                prefsManager.setCrashReportingEnabled(enabled)
-                FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(enabled)
-            }
-        }
-    )
+// In settings component
+function SettingsPanel() {
+    const [crashReporting, setCrashReporting] = useState(true);
+
+    const handleToggle = (enabled) => {
+        setCrashReporting(enabled);
+        saveUserPreference('crashReportingEnabled', enabled);
+        Sentry.getCurrentHub().getClient().getOptions().enabled = enabled;
+    };
+
+    return (
+        <FormControlLabel
+            control={<Switch checked={crashReporting} onChange={(e) => handleToggle(e.target.checked)} />}
+            label="Anonymous Error Reporting"
+        />
+    );
 }
 ```
 
-**Option 2: Sentry (More privacy-focused)**
-
-```kotlin
-// build.gradle.kts
-dependencies {
-    implementation("io.sentry:sentry-android:6.34.0")
-}
-
-// In Application class
-SentryAndroid.init(this) { options ->
-    options.dsn = "your-sentry-dsn" // From Sentry dashboard
-    
-    // Scrub PII
-    options.beforeSend = SentryOptions.BeforeSendCallback { event, hint ->
-        // Remove user preferences, URLs, etc. from crash logs
-        event.contexts.remove("user_preferences")
-        event.breadcrumbs.clear() // Remove navigation history
-        event
-    }
-    
-    // Respect user preference
-    val enabled = prefsManager.isCrashReportingEnabled().first()
-    options.isEnabled = enabled
-}
-```
-
-**Recommendation:**
-- **Firebase Crashlytics** for MVP: Free, easy setup, good stack traces
-- **Critical:** Disable Firebase Analytics completely, expose opt-out toggle prominently
-- **Post-MVP:** Consider self-hosted Sentry if community feedback suggests Firebase is unacceptable
+**Option 2: No crash reporting (simplest)**
+- For MVP, you can skip crash reporting entirely
+- Use browser DevTools console for debugging
+- Add later if needed
 
 ---
 
-### 10.6 Architecture Overview
+### 10.6 PWA Configuration
 
-**Pattern: MVVM with Repository**
+**manifest.json (in public/ folder):**
 
-```
-dev.edgereader.app/
-├── ui/ (Composables)
-│   ├── feed/
-│   │   ├── FeedScreen.kt
-│   │   └── FeedViewModel.kt
-│   ├── settings/
-│   │   ├── SettingsScreen.kt
-│   │   └── SettingsViewModel.kt
-│   └── onboarding/
-│       └── OnboardingScreen.kt
-├── data/
-│   ├── repository/
-│   │   └── NewsRepository.kt (coordinates RSS + API fetching)
-│   ├── local/
-│   │   ├── AppDatabase.kt (Room)
-│   │   └── ArticleDao.kt
-│   ├── remote/
-│   │   ├── RssFeedParser.kt
-│   │   └── NewsApiClient.kt (optional)
-│   └── model/
-│       ├── Article.kt
-│       └── UserPreferences.kt
-└── util/
-    ├── PreferencesManager.kt (DataStore)
-    └── RankingAlgorithm.kt
+```json
+{
+    "name": "EdgeReader",
+    "short_name": "EdgeReader",
+    "description": "Privacy-focused news aggregator",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1976d2",
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
 ```
 
-**Key Principles:**
-- Keep ViewModels thin (delegate to repository)
-- Use Kotlin coroutines and Flow for async operations
-- Write unit tests for ranking algorithm
-- Skip complex DI frameworks for MVP
+**Service Worker (for offline support):**
+
+```javascript
+// Using Workbox (Antigravity can generate this)
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { CacheFirst, NetworkFirst } from 'workbox-strategies';
+
+// Precache app shell
+precacheAndRoute(self.__WB_MANIFEST);
+
+// Cache RSS feed responses
+registerRoute(
+    ({ url }) => url.pathname.includes('/rss') || url.pathname.includes('/feed'),
+    new NetworkFirst({
+        cacheName: 'rss-feeds',
+        networkTimeoutSeconds: 5
+    })
+);
+
+// Cache images
+registerRoute(
+    ({ request }) => request.destination === 'image',
+    new CacheFirst({
+        cacheName: 'images'
+    })
+);
+```
 
 ---
 
-### 10.7 Open Source License
+### 10.7 Deployment with Antigravity
 
-**Recommended: GPL-3.0**
+**Antigravity handles:**
+- ✅ Build process (Vite bundling)
+- ✅ Hosting (automatic HTTPS)
+- ✅ Domain configuration (custom domain or Antigravity subdomain)
+- ✅ Continuous deployment (push to update)
 
-**Rationale:**
-- **Prevents commercial forks:** Derivatives must also be GPL-3.0 (copyleft)
-- **Allows personal monetization:** You can dual-license later
-- **Community acceptance:** F-Droid and privacy communities prefer GPL
+**Steps:**
+1. Build app in Antigravity
+2. Deploy to Antigravity hosting
+3. Get URL: `https://your-app.antigravity.dev` or custom domain
+4. Share URL or add to home screen on mobile
+
+**No manual deployment needed!**
+
+---
+
+### 10.8 Open Source License
+
+**Recommended: GPL-3.0** (same as Android version)
 
 **Implementation:**
 1. Add `LICENSE` file with GPL-3.0 text
 2. Add license header to source files
 3. Mention in README: "Licensed under GPL-3.0"
+4. Host on GitHub for transparency
 
 ---
 
 ## 11. Privacy Policy Requirements
 
-Host a simple webpage (GitHub Pages, Netlify) with:
+Host a simple webpage (same domain as PWA or GitHub Pages) with:
 
 **Required sections:**
 1. **Data Collection:** "EdgeReader does not collect, store, or transmit any personal information or user behavior data."
@@ -599,82 +611,85 @@ Host a simple webpage (GitHub Pages, Netlify) with:
 
 ---
 
-## 12. Google Play Submission Checklist
+## 12. Deployment Checklist
 
-**Pre-submission:**
-- [ ] Test on 2+ devices/emulators
+**Pre-deployment:**
+- [ ] Test on 2+ browsers (Chrome, Firefox, Safari)
+- [ ] Test on mobile devices (Android, iOS)
 - [ ] Verify crash reporting opt-out works
 - [ ] Create privacy policy webpage
-- [ ] Prepare screenshots (at least 2, ideally 8)
-- [ ] Write store description emphasizing privacy and edge computing
-- [ ] Fill Data Safety form (select "No data collected" except crash reports)
-- [ ] Test with Google Play pre-launch report
+- [ ] Test PWA installation (Add to Home Screen)
+- [ ] Verify offline mode works
+- [ ] Test on slow network (throttle to 3G)
+- [ ] Run Lighthouse audit (aim for 90+ scores)
 
 ---
 
-## 13. Next Steps (6-Week Roadmap)
+## 13. Next Steps (4-Week Roadmap with Antigravity)
 
 ### Week 1: Project Setup
-1. Create GitHub repo: `github.com/yourusername/edgereader`
-2. Initialize Android Studio (Kotlin + Compose, package: `dev.edgereader.app`)
-3. Set up RSS parsing (test 3-5 feeds)
+1. Create project in Antigravity
+2. Initialize React + Material UI + Vite
+3. Set up RSS parsing (test 3-5 feeds with CORS handling)
 4. Build basic feed display
 
-### Week 2-3: Preferences and Ranking
-5. Implement DataStore for preferences
+### Week 2: Preferences and Ranking
+5. Implement IndexedDB for preferences
 6. Build onboarding flow
 7. Implement ranking algorithm
 8. Build settings screen
 
-### Week 4: Browser and Caching
-9. Add external browser integration
-10. Set up Room database
+### Week 3: Offline and Caching
+9. Set up Service Worker for offline mode
+10. Implement IndexedDB article caching
 11. Add loading states and error handling
+12. Test PWA installation
 
-### Week 5: Crash Reporting and Polish
-12. Integrate Crashlytics
-13. UI polish (images, dates, cards)
-14. Performance testing
+### Week 4: Polish and Deployment
+13. Optional: Integrate Sentry for error tracking
+14. UI polish (images, dates, cards)
+15. Performance testing (Lighthouse audit)
+16. Deploy to Antigravity hosting
 
-### Week 6: Play Store Prep
-15. Create privacy policy
-16. Prepare store assets
-17. Testing with friends
-18. Submit to open testing
+
 
 ---
 
 ## 14. Success Metrics (Personal Use)
 
 **MVP success:**
-- [ ] App usable for daily news reading
-- [ ] Crashes less than once per week
+- [ ] PWA usable for daily news reading
+- [ ] No critical errors in browser console
 - [ ] Feed loads in under 2 seconds
 - [ ] Personalization feels better than individual sites
+- [ ] Installable on mobile home screen
+- [ ] Works offline
 - [ ] Stable enough to share with 5-10 people
 
 **Post-MVP:**
 - [ ] GitHub repo gets 50+ stars
 - [ ] 1-2 external contributors
 - [ ] Personal usage continues 6+ months
-- [ ] Approved on F-Droid
+- [ ] Listed on privacy-focused directories
 
 ---
 
 ## 15. Glossary
 
-- **Edge computing:** Computing performed at or near the source of data (on-device)
-- **On-device processing:** Computation occurs locally; no data sent to servers
-- **External browser:** Default browser app (Chrome, Brave, Firefox); not in-app WebView
+- **Edge computing:** Computing performed at or near the source of data (client-side)
+- **Client-side processing:** Computation occurs in browser; no data sent to servers
+- **PWA (Progressive Web App):** Web app that works offline and can be installed like native app
+- **Service Worker:** Background script that enables offline functionality
+- **IndexedDB:** Browser database for storing large amounts of structured data
 - **RSS feed:** Standardized web feed format for site updates
 - **GPL-3.0:** Copyleft license requiring derivatives to be open-source
-- **Material Design 3:** Google's latest Android design system
-- **DataStore:** Modern Android key-value storage
-- **Jetpack Compose:** Android's declarative UI toolkit
+- **Material Design 3:** Google's latest design system
+- **Antigravity:** Google's DeepAgent tool for building web applications
 
 ---
 
-**Document Version:** 3.0  
+**Document Version:** 4.0 (PWA Edition)  
 **Last Updated:** December 30, 2025  
-**Status:** Ready for development  
-**Next Review:** After MVP completion (~6 weeks)
+**Status:** Ready for development with Antigravity  
+**Next Review:** After MVP completion (~4 weeks)  
+**Previous Version:** 3.0 (Android native)
