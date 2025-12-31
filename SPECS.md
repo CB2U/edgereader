@@ -40,11 +40,11 @@
 | 2.2 | Onboarding Flow | [specs/022-onboarding-flow/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/022-onboarding-flow/) | BP2 | Done | FR-7, AC-5, NFR-5 |
 | 3.0 | Article Caching (IndexedDB) | [specs/030-article-caching/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/030-article-caching/) | BP3 | Done | FR-10, AC-7 |
 | 3.1 | Offline Mode & Service Worker | [specs/031-offline-mode/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/031-offline-mode/) | BP3 | Done | FR-9, FR-10, AC-7 |
-| 4.0 | Crash Reporting with Opt-Out | `specs/010-crash-reporting/` | BP4 | Not started | FR-11, FR-12, AC-9, AC-10, NFR-2 |
-| 4.1 | Settings Screen | `specs/011-settings-screen/` | BP4 | Not started | FR-8, AC-6, AC-9 |
-| 4.2 | UI Polish & Material Design 3 | `specs/012-ui-polish/` | BP4 | Not started | FR-5, AC-12, NFR-5 |
-| 5.0 | Privacy Policy & Legal Compliance | `specs/013-privacy-policy/` | BP5 | Not started | NFR-6, AC-11 |
-| 5.1 | Testing & Release Preparation | `specs/014-release-prep/` | BP5 | Not started | AC-8, AC-11, NFR-3, NFR-4 |
+| 4.0 | Crash Reporting with Opt-Out | [specs/040-error-reporting/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/040-error-reporting/) | BP4 | Done | FR-11, FR-12, AC-9, AC-10, NFR-2 |
+| 4.1 | Settings Screen | `specs/041-settings-screen/` | BP4 | Not started | FR-8, AC-6, AC-9 |
+| 4.2 | UI Polish & Material Design 3 | `specs/042-ui-polish/` | BP4 | Not started | FR-5, AC-12, NFR-5 |
+| 5.0 | Privacy Policy & Legal Compliance | `specs/050-privacy-policy/` | BP5 | Not started | NFR-6, AC-11 |
+| 5.1 | Testing & Release Preparation | `specs/051-release-prep/` | BP5 | Not started | AC-8, AC-11, NFR-3, NFR-4 |
 
 ---
 
@@ -52,10 +52,10 @@
 
 | Roadmap Anchor | Epic Name | Spec Folder | Breakpoint | Status | Target ACs |
 |----------------|-----------|-------------|------------|--------|------------|
-| 6.0 | Dark Mode | `specs/015-dark-mode/` | BP6 | Not started | User Story #9 (P1) |
-| 6.1 | Bookmarks / Save for Later | `specs/016-bookmarks/` | BP6 | Not started | User Story #8 (P1) |
-| 6.2 | Search & Keyword Filtering | `specs/017-search/` | BP6 | Not started | User Story #7 (P1) |
-| 6.3 | Custom RSS Feeds | `specs/018-custom-rss/` | BP6 | Not started | User Story #6 (P1) |
+| 6.0 | Dark Mode | `specs/060-dark-mode/` | BP6 | Not started | User Story #9 (P1) |
+| 6.1 | Bookmarks / Save for Later | `specs/061-bookmarks/` | BP6 | Not started | User Story #8 (P1) |
+| 6.2 | Search & Keyword Filtering | `specs/062-search/` | BP6 | Not started | User Story #7 (P1) |
+| 6.3 | Custom RSS Feeds | `specs/063-custom-rss/` | BP6 | Not started | User Story #6 (P1) |
 
 ---
 
@@ -66,8 +66,8 @@
 | **BP0** | Project foundation | 1.0, 1.1 | Done |
 | **BP1** | Core aggregation | 1.2, 1.3 | Done |
 | **BP2** | Personalization | 2.0, 2.1, 2.2 | Done |
-| **BP3** | Offline & caching | 3.0, 3.1 | In progress |
-| **BP4** | Privacy & polish | 4.0, 4.1, 4.2 | Not started |
+| **BP3** | Offline & caching | 3.0, 3.1 | Done |
+| **BP4** | Privacy & polish | 4.0, 4.1, 4.2 | In progress |
 | **BP5** | Release ready | 5.0, 5.1 | Not started |
 | **BP6** | Post-MVP features | 6.0, 6.1, 6.2, 6.3 | Not started |
 
@@ -110,6 +110,8 @@
 **Next Review:** After each breakpoint completion
 
 **Change Log:**
+- 2025-12-31: Completed Epic 4.0 (Error Reporting with Opt-Out) - Sentry integrated with PII scrubbing, user opt-out implemented in Settings, and Privacy Policy added.
+- 2025-12-31: Created Epic 4.0 (Error Reporting with Opt-Out) spec package - ready for implementation. Fixed spec folder paths for all future epics (4.0-6.3). Marked BP3 as Done, BP4 as In progress.
 - 2025-12-31: Completed Epic 3.1 (Offline Mode & Service Worker) - all ACs passed, walkthrough created
 - 2025-12-31: Created Epic 3.1 (Offline Mode & Service Worker) spec package - ready for implementation
 - 2025-12-31: Completed Epic 3.0 (Article Caching) implementation - all ACs passed

@@ -100,6 +100,8 @@ You have full control—no black-box algorithms, no hidden manipulation.
 | ❌ Cookies or tracking pixels |                                     |
 | ❌ Analytics/tracking data    |                                     |
 
+**Full details:** See [Privacy Policy](docs/PRIVACY.md) for anonymization details and opt-out instructions.
+
 **Why trust us?**
 
 - Open source code—audit it yourself

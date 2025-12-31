@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Container, Typography, Box, List, ListItem, ListItemText, CircularProgress, Alert } from '@mui/material';
+import { Container, Typography, Box, List, ListItem, ListItemText, CircularProgress, Alert, Drawer, IconButton } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { fetchAllFeeds } from './services/rssService';
 import { loadPreferences } from './services/storageService';
 import { rankArticles } from './services/rankingService';
@@ -7,6 +8,7 @@ import { insertArticles, deleteOldArticles, getArticles } from './services/artic
 import './App.css';
 import OfflineIndicator from './components/OfflineIndicator';
 import RefreshButton from './components/RefreshButton';
+import SettingsPanel from './components/SettingsPanel';
 
 /**
  * Format a date as relative time (e.g., "2h ago", "3d ago", "Dec 30")
@@ -36,6 +38,7 @@ function App() {
   const [error, setError] = useState(null);
   const [prefs, setPrefs] = useState(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -142,11 +145,20 @@ function App() {
                 {articles.length} articles from {[...new Set(articles.map(a => a.source))].length} sources
               </Typography>
             </Box>
-            <RefreshButton
-              onRefresh={handleRefresh}
-              isLoading={refreshing}
-              isOnline={isOnline}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <RefreshButton
+                onRefresh={handleRefresh}
+                isLoading={refreshing}
+                isOnline={isOnline}
+              />
+              <IconButton
+                onClick={() => setSettingsOpen(true)}
+                title="Settings"
+                aria-label="Settings"
+              >
+                <SettingsIcon />
+              </IconButton>
+            </Box>
           </Box>
           <List>
             {articles.map((article, index) => (
@@ -189,6 +201,15 @@ function App() {
           </List>
         </Box>
       </Container>
+      <Drawer
+        anchor="right"
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+      >
+        <Box sx={{ width: { xs: '100vw', sm: 400 } }}>
+          <SettingsPanel />
+        </Box>
+      </Drawer>
     </>
   );
 }

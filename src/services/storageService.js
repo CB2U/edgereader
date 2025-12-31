@@ -13,10 +13,11 @@ const PREFS_KEY = 'userPreferences';
 
 /**
  * Initializes the IndexedDB database.
+ * @param {string} dbName - Optional database name (defaults to 'edgereader')
  * @returns {Promise<IDBDatabase>}
  */
-export async function initDB() {
-    return openDB(DB_NAME, DB_VERSION, {
+export async function initDB(dbName = DB_NAME) {
+    return openDB(dbName, DB_VERSION, {
         upgrade(db) {
             if (!db.objectStoreNames.contains(STORE_NAME)) {
                 db.createObjectStore(STORE_NAME);
@@ -35,6 +36,7 @@ export function getDefaultPreferences() {
         enabledSources: new Set(), // Empty = all enabled
         disabledSources: new Set(),
         keywords: new Set(),
+        errorReportingEnabled: true,
     };
 }
 
@@ -49,6 +51,7 @@ function serializePreferences(prefs) {
         enabledSources: Array.from(prefs.enabledSources),
         disabledSources: Array.from(prefs.disabledSources),
         keywords: Array.from(prefs.keywords),
+        errorReportingEnabled: prefs.errorReportingEnabled,
     };
 }
 
@@ -63,17 +66,19 @@ function deserializePreferences(stored) {
         enabledSources: new Set(stored.enabledSources || []),
         disabledSources: new Set(stored.disabledSources || []),
         keywords: new Set(stored.keywords || []),
+        errorReportingEnabled: stored.errorReportingEnabled ?? true,
     };
 }
 
 /**
  * Saves user preferences to IndexedDB.
  * @param {Object} prefs - UserPreferences with Sets
+ * @param {string} dbName - Optional database name
  * @returns {Promise<void>}
  */
-export async function savePreferences(prefs) {
+export async function savePreferences(prefs, dbName = DB_NAME) {
     try {
-        const db = await initDB();
+        const db = await initDB(dbName);
         const serialized = serializePreferences(prefs);
         await db.put(STORE_NAME, serialized, PREFS_KEY);
         console.log('Preferences saved successfully');
@@ -86,11 +91,12 @@ export async function savePreferences(prefs) {
 /**
  * Loads user preferences from IndexedDB.
  * Returns defaults if none exist.
+ * @param {string} dbName - Optional database name
  * @returns {Promise<Object>} UserPreferences with Sets
  */
-export async function loadPreferences() {
+export async function loadPreferences(dbName = DB_NAME) {
     try {
-        const db = await initDB();
+        const db = await initDB(dbName);
         const stored = await db.get(STORE_NAME, PREFS_KEY);
 
         if (!stored) {
@@ -108,11 +114,12 @@ export async function loadPreferences() {
 /**
  * Updates partial user preferences by merging with existing.
  * @param {Object} partial - Partial UserPreferences
+ * @param {string} dbName - Optional database name
  * @returns {Promise<Object>} Updated UserPreferences with Sets
  */
-export async function updatePreferences(partial) {
+export async function updatePreferences(partial, dbName = DB_NAME) {
     try {
-        const existing = await loadPreferences();
+        const existing = await loadPreferences(dbName);
 
         // Merge partial updates
         const updated = {
@@ -120,9 +127,10 @@ export async function updatePreferences(partial) {
             enabledSources: partial.enabledSources || existing.enabledSources,
             disabledSources: partial.disabledSources || existing.disabledSources,
             keywords: partial.keywords || existing.keywords,
+            errorReportingEnabled: partial.errorReportingEnabled !== undefined ? partial.errorReportingEnabled : existing.errorReportingEnabled,
         };
 
-        await savePreferences(updated);
+        await savePreferences(updated, dbName);
         return updated;
     } catch (error) {
         console.error('Error updating preferences:', error);

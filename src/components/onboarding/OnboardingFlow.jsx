@@ -34,7 +34,8 @@ const OnboardingFlow = ({ onComplete }) => {
                 selectedTopics: selectedTopics,
                 enabledSources: enabledSources,
                 disabledSources: disabledSources,
-                keywords: new Set()
+                keywords: new Set(),
+                errorReportingEnabled: true,
             };
 
             // Save to IndexedDB
