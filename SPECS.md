@@ -1,7 +1,7 @@
 # EdgeReader Spec Index
 
 **Version:** 1.0  
-**Last Updated:** December 30, 2025  
+**Last Updated:** December 31, 2025  
 **Purpose:** Track all feature specifications and their implementation status
 
 ---
@@ -38,8 +38,8 @@
 | 2.0 | User Preferences Storage | [specs/020-preferences-storage/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/020-preferences-storage/) | BP2 | Done | FR-2, FR-3, AC-3, NFR-1 |
 | 2.1 | On-Device Ranking Algorithm | [specs/021-ranking-algorithm/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/021-ranking-algorithm/) | BP2 | Done | FR-4, AC-2, AC-6 |
 | 2.2 | Onboarding Flow | [specs/022-onboarding-flow/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/022-onboarding-flow/) | BP2 | Done | FR-7, AC-5, NFR-5 |
-| 3.0 | Local Database (Room) | `specs/008-room-database/` | BP3 | Not started | FR-10, AC-7 |
-| 3.1 | Offline Mode & Pull-to-Refresh | `specs/009-offline-mode/` | BP3 | Not started | FR-9, FR-10, AC-7 |
+| 3.0 | Article Caching (IndexedDB) | [specs/030-article-caching/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/030-article-caching/) | BP3 | Done | FR-10, AC-7 |
+| 3.1 | Offline Mode & Service Worker | [specs/031-offline-mode/](file:///mnt/Storage/Documents/Projects/EdgeReader/specs/031-offline-mode/) | BP3 | Done | FR-9, FR-10, AC-7 |
 | 4.0 | Crash Reporting with Opt-Out | `specs/010-crash-reporting/` | BP4 | Not started | FR-11, FR-12, AC-9, AC-10, NFR-2 |
 | 4.1 | Settings Screen | `specs/011-settings-screen/` | BP4 | Not started | FR-8, AC-6, AC-9 |
 | 4.2 | UI Polish & Material Design 3 | `specs/012-ui-polish/` | BP4 | Not started | FR-5, AC-12, NFR-5 |
@@ -63,10 +63,10 @@
 
 | Breakpoint | Description | Epics | Status |
 |------------|-------------|-------|--------|
-| **BP0** | Project foundation | 1.0, 1.1 | Not started |
-| **BP1** | Core aggregation | 1.2, 1.3 | Not started |
-| **BP2** | Personalization | 2.0, 2.1, 2.2 | Not started |
-| **BP3** | Offline & caching | 3.0, 3.1 | Not started |
+| **BP0** | Project foundation | 1.0, 1.1 | Done |
+| **BP1** | Core aggregation | 1.2, 1.3 | Done |
+| **BP2** | Personalization | 2.0, 2.1, 2.2 | Done |
+| **BP3** | Offline & caching | 3.0, 3.1 | In progress |
 | **BP4** | Privacy & polish | 4.0, 4.1, 4.2 | Not started |
 | **BP5** | Release ready | 5.0, 5.1 | Not started |
 | **BP6** | Post-MVP features | 6.0, 6.1, 6.2, 6.3 | Not started |
@@ -110,4 +110,8 @@
 **Next Review:** After each breakpoint completion
 
 **Change Log:**
+- 2025-12-31: Completed Epic 3.1 (Offline Mode & Service Worker) - all ACs passed, walkthrough created
+- 2025-12-31: Created Epic 3.1 (Offline Mode & Service Worker) spec package - ready for implementation
+- 2025-12-31: Completed Epic 3.0 (Article Caching) implementation - all ACs passed
+- 2025-12-31: Added Epic 3.0 (Article Caching) spec, marked BP0-BP2 as Done, BP3 as In progress
 - 2025-12-30: Initial spec index created with all MVP and post-MVP epics
